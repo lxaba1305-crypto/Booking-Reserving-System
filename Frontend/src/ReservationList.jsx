@@ -1,13 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from './api'
 
 export default function ReservationList() {
     const [reservations, setReservations] = useState([]);
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/api/bookings/${id}`);
+            await axios.delete(`${BASE_URL}/api/bookings/${id}`);
             setReservations(reservations.filter(reservation => reservation.id !== id));
         } catch (err) {
             console.error('Error deleting reservation:', err);
@@ -17,7 +18,7 @@ export default function ReservationList() {
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/bookings');
+                const response = await axios.get(`${BASE_URL}/api/bookings`);
                 setReservations(response.data);
             } catch (err) {
                 console.error('Error fetching reservations:', err);

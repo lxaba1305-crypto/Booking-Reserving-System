@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useState } from 'react'
+import BASE_URL from './api'
 
 export default function AvailabilityView({ selectedRoom, checkInDate, checkOutDate, setSelectedSlot }) {
     const [results, setResult] = useState(null)
@@ -8,7 +9,7 @@ export default function AvailabilityView({ selectedRoom, checkInDate, checkOutDa
 
     const checkAvailability = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/availability/${checkInDate}/${checkOutDate}/${selectedRoom}`
+            const response = await axios.get(`${BASE_URL}/api/availability/${checkInDate}/${checkOutDate}/${selectedRoom}`
             )
 
             if (response.data.length > 0) {

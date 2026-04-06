@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import BASE_URL from './api'
 
 export default function BookingForm({selectedSlot, checkInDate, checkOutDate}) {
 
@@ -8,10 +9,11 @@ export default function BookingForm({selectedSlot, checkInDate, checkOutDate}) {
     const [email, setEmail] = useState('');
     const [numberOfGuests, setNumberOfGuests] = useState(1);
     const [message, setMessage] = useState('');
+
     
     const handleBooking = async () => {
         try {
-            await axios.post('http://localhost:3000/api/bookings', {
+            await axios.post(`${BASE_URL}/api/bookings`, {
                 guestName,
                 roomType: selectedSlot,
                 checkInDate,
