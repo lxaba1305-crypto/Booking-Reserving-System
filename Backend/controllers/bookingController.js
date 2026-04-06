@@ -22,13 +22,18 @@ const deleteBooking = (req, res) => {
 
 const checkAvailability = (req, res) => {
     const { checkIn, checkOut, roomType } = req.params;
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+
     const availableRooms = rooms.filter(room => {
         if (room.roomType === roomType) {
             const isBooked = bookings.some(booking => {
+
+                const bookingCheckIn = new Date(booking.checkInDate);
+                const bookingCheckOut = new Date(booking.checkOutDate);
                 return booking.roomType === roomType &&
-                    ((checkIn >= booking.checkIn && checkIn < booking.checkOut) ||
-                    (checkOut > booking.checkIn && checkOut <= booking.checkOut) ||
-                    (checkIn <= booking.checkIn && checkOut >= booking.checkOut));
+                    (checkInDate < bookingCheckOut && checkOutDate > bookingCheckIn);
             });
             return !isBooked;
         }
@@ -52,15 +57,17 @@ const createBooking = (req, res) => {
     }
 
     const hasConflict = bookings.some(booking => {
+        const bookingCheckIn = new Date(booking.checkInDate);
+        const bookingCheckOut = new Date(booking.checkOutDate);
+        const newCheckIn = new Date(checkInDate);
+        const newCheckOut = new Date(checkOutDate);
         return booking.roomType === roomType &&
-            ((checkInDate >= booking.checkInDate && checkInDate < booking.checkOutDate) ||
-            (checkOutDate > booking.checkInDate && checkOutDate <= booking.checkOutDate) ||
-            (checkInDate <= booking.checkInDate && checkOutDate >= booking.checkOutDate));
-
+            (newCheckIn < bookingCheckOut && newCheckOut > bookingCheckIn);
     });
+
     if (hasConflict) {
-                return res.status(400).json({ message: "Room is not available for these chosen dates." });
-            }   
+        return res.status(400).json({ message: 'Selected room is not available for the chosen dates.' });
+    }
     
 
     const newBooking = {

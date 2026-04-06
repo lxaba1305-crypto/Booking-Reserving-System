@@ -19,7 +19,7 @@ export default function AvailabilityView({ selectedRoom, checkInDate, checkOutDa
                 setResult('unavailable')
             }
         } catch (err) {
-            setError('Failed to check availability. Please try again later.')
+            setError(err.response?.data?.message || 'Failed to check availability. Please try again later.')
         }
     }
             
